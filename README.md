@@ -1,4 +1,4 @@
-# Session 16: CI/CD & GitHub Actions
+# CI/CD & GitHub Actions
 
 ## What we will build
 
@@ -28,27 +28,6 @@ Artifact available
 
 GitHub workflow files are YAML files stored under `.github/workflows/`. A workflow contains jobs, and each job contains steps that execute on a runner.  
 
----
-
-## 1. Session Structure
-
-Session 16: CI/CD & GitHub Actions
-01. CI vs CD
-02. CI/CD Pipeline
-03. GitHub Actions
-04. Workflow
-05. Jobs
-06. Steps
-07. Runners
-08. Secrets
-09. Artifacts
-10. Build & Test Pipeline
-11. Hands-on GitHub Actions
-12. Trigger pipeline using git push
-13. Read pipeline logs
-14. Download artifact
-
----
 
 ## 2. Project Folder Structure
 
@@ -210,7 +189,6 @@ Enter calculation (e.g., 10 + 5): q
 Goodbye!
 ```
 
-This gives students a very simple application to understand.
 
 ---
 
@@ -296,7 +274,6 @@ tests/test_calculator.py .....                                             [100%
 
 The exact platform, Python version and execution time can differ.
 
-Explain to students:
 
 ```text
 5 tests
@@ -667,7 +644,6 @@ Actions
 Run workflow
 ```
 
-Students can manually run the pipeline.
 
 ---
 
@@ -978,7 +954,6 @@ Build and Test
 └── [PASS] Upload build artifact
 ```
 
-Students should understand this screen extremely well.
 
 This is the actual CI/CD pipeline.
 
@@ -1046,7 +1021,7 @@ We upload it using:
 
 ---
 
-## 33. Where Students See the Artifact
+## 33. Where we can See the Artifact
 
 Go to:
 
@@ -1083,8 +1058,6 @@ build-info.txt
 ---
 
 ## 34. Artifact vs Git Repository
-
-Explain this very clearly.
 
 **Git**
 
@@ -1248,8 +1221,6 @@ Upload Artifact
 
 ## 39. Demonstrate Failure
 
-This is one of the best classroom demos.
-
 Change:
 
 ```python
@@ -1299,8 +1270,6 @@ Overall:
 [FAIL] Python CI Pipeline
 ```
 
-This is a fantastic moment to tell students:
-
 > "CI is not here to make developers happy. CI is here to catch broken code before it moves forward."
 
 Then fix:
@@ -1327,8 +1296,6 @@ Expected:
 ---
 
 ## 40. Multiple Jobs Demo
-
-After students understand the single-job pipeline, show how a real pipeline can contain multiple jobs.
 
 Replace the workflow with:
 
@@ -1384,7 +1351,6 @@ jobs:
 
 ## 41. Important: Jobs Run in Parallel
 
-Students will see:
 
 ```text
 CI Pipeline
@@ -1450,7 +1416,6 @@ This is a very important CI/CD concept.
 
 ## 43. Final Recommended ci.yml
 
-For the students’ final repository, I recommend keeping it simple:
 
 ```yaml
 name: Python CI Pipeline
@@ -1512,7 +1477,6 @@ jobs:
 
 ## 44. Final Pipeline
 
-Students should remember this:
 
 ```text
                     GitHub Repository
@@ -1542,598 +1506,3 @@ Students should remember this:
 ```
 
 ---
-
-## 45. Complete README.md
-
-Use this as the project’s README.
-
-```markdown
-# Session 16: CI/CD & GitHub Actions
-This project demonstrates a basic CI/CD pipeline using GitHub Actions.
-The application is a simple Python calculator.
-
----
-
-## Topics Covered
-- CI vs CD
-- CI/CD Pipeline
-- GitHub Actions
-- Workflows
-- Jobs
-- Steps
-- Runners
-- Secrets
-- Artifacts
-- Build and Test Pipeline
-
----
-
-## Project Structure
-```text
-session16-cicd-github-actions/
-│
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-│
-├── app/
-│   ├── __init__.py
-│   └── calculator.py
-│
-├── tests/
-│   └── test_calculator.py
-│
-├── requirements.txt
-├── build.sh
-├── .gitignore
-└── README.md
-```
-
----
-
-### 1. Application
-
-The application contains four operations:
-
-* Addition
-* Subtraction
-* Multiplication
-* Division
-
-Run locally:
-
-```bash
-python3 app/calculator.py
-```
-
-Expected output:
-
-```text
-Calculator Application
-----------------------
-Available operations: +, -, *, /
-Type 'q' or 'quit' to exit.
-
-Enter calculation (e.g., 10 + 5): 10 + 5
-Result: 15.0
-
-Enter calculation (e.g., 10 + 5): q
-Goodbye!
-```
-
----
-
-### 2. Install Dependencies
-
-```bash
-python3 -m pip install -r requirements.txt
-```
-
----
-
-### 3. Run Tests
-
-```bash
-pytest
-```
-
-Expected:
-
-```text
-============================= test session starts =============================
-collected 5 items
-tests/test_calculator.py .....                                             [100%]
-============================== 5 passed ==============================
-```
-
----
-
-### 4. Build Application
-
-Make the script executable:
-
-```bash
-chmod +x build.sh
-```
-
-Run:
-
-```bash
-./build.sh
-```
-
-Expected:
-
-```text
-Starting build...
-Application copied to build directory.
-Build completed successfully.
-```
-
-Check build:
-
-```bash
-ls -la build
-```
-
-Expected:
-
-```text
-calculator.py
-build-info.txt
-```
-
----
-
-### 5. GitHub Actions
-
-The workflow is located at:
-
-`.github/workflows/ci.yml`
-
-The workflow runs when:
-
-* Code is pushed to main
-* Pull request is created/updated against main
-* Workflow is manually triggered
-
----
-
-### 6. Pipeline
-
-```text
-Git Push
-   ↓
-GitHub Actions
-   ↓
-Test Job
-   ↓
-Checkout
-   ↓
-Setup Python
-   ↓
-Install Dependencies
-   ↓
-Run Tests
-   ↓
-PASS
-   ↓
-Build Job
-   ↓
-Build Application
-   ↓
-Upload Artifact
-```
-
----
-
-### 7. Jobs
-
-The workflow contains two jobs:
-
-* `test`
-* `build`
-
-The build job depends on the test job.
-
-```yaml
-needs: test
-```
-
-Therefore:
-
-```text
-Test PASS
-    ↓
-Build starts
-```
-
-If tests fail:
-
-```text
-Test FAIL
-    ↓
-Build does not run
-```
-
----
-
-### 8. Runner
-
-The pipeline uses:
-
-```yaml
-runs-on: ubuntu-latest
-```
-
-GitHub provides the runner environment to execute the workflow.
-
----
-
-### 9. Secrets
-
-Repository secrets can be configured from:
-
-```text
-Repository
--> Settings
--> Secrets and variables
--> Actions
-```
-
-Example:
-
-`DEMO_SECRET`
-
-Secrets should not be hardcoded into workflow files.
-
----
-
-### 10. Artifacts
-
-The build output is uploaded using:
-
-```yaml
-uses: actions/upload-artifact@v4
-```
-
-Artifact name:
-
-`calculator-build`
-
-The artifact contains:
-
-```text
-calculator.py
-build-info.txt
-```
-
-It can be downloaded from the workflow run summary.
-
----
-
-### 11. Git Commands
-
-Initialize repository:
-
-```bash
-git init
-```
-
-Check status:
-
-```bash
-git status
-```
-
-Add files:
-
-```bash
-git add .
-```
-
-Commit:
-
-```bash
-git commit -m "Add CI pipeline"
-```
-
-Add remote:
-
-```bash
-git remote add origin https://github.com/YOUR_USERNAME/session16-cicd-github-actions.git
-```
-
-Set main branch:
-
-```bash
-git branch -M main
-```
-
-Push:
-
-```bash
-git push -u origin main
-```
-
-Future changes:
-
-```bash
-git add .
-git commit -m "Update application"
-git push
-```
-
----
-
-### 12. Expected Successful Pipeline
-
-```text
-Python CI Pipeline
-[PASS] Test Application
-  [PASS] Checkout source code
-  [PASS] Setup Python
-  [PASS] Display Python version
-  [PASS] Install dependencies
-  [PASS] Run tests
-[PASS] Build Application
-  [PASS] Checkout source code
-  [PASS] Setup Python
-  [PASS] Build application
-  [PASS] Show build output
-  [PASS] Upload build artifact
-```
-
----
-
-### 13. Failure Demonstration
-
-Change the calculator code intentionally:
-
-```python
-def add(a, b):
-    return a + b + 1
-```
-
-Run:
-
-```bash
-pytest
-```
-
-Expected:
-
-```text
-FAILED tests/test_calculator.py::test_add
-```
-
-Push the change:
-
-```bash
-git add .
-git commit -m "Test CI failure"
-git push
-```
-
-GitHub Actions should show:
-
-```text
-[PASS] Test Application
-[FAIL] Run tests
-```
-
-The pipeline fails.
-
-Fix the code:
-
-```python
-def add(a, b):
-    return a + b
-```
-
-Then:
-
-```bash
-git add .
-git commit -m "Fix calculator"
-git push
-```
-
-Expected:
-
-```text
-[PASS] Test Application
-[PASS] Build Application
-```
-
----
-
-### Key Takeaway
-
-CI/CD automates the process of:
-
-```text
-Code
- ↓
-Build
- ↓
-Test
- ↓
-Package
- ↓
-Release / Deploy
-```
-
-GitHub Actions allows us to define this automation using YAML workflows.
-
----
-
-## 46. Student Hands-on Task
-
-Give students this challenge at the end.
-
-### Task 1
-
-Add a new function:
-
-```python
-def power(a, b):
-    return a ** b
-```
-
-### Task 2
-
-Add a test:
-
-```python
-def test_power():
-    assert power(2, 3) == 8
-```
-
-### Task 3
-
-Run:
-
-```bash
-pytest
-```
-
-Expected:
-
-```text
-6 passed
-```
-
-### Task 4
-
-Push to GitHub:
-
-```bash
-git add .
-git commit -m "Add power operation"
-git push
-```
-
-### Task 5
-
-Check:
-
-```text
-GitHub
- -> Actions
- -> Python CI Pipeline
-```
-
-Expected:
-
-```text
-[PASS] Test Application
-[PASS] Build Application
-```
-
-### Task 6
-
-Download:
-
-`calculator-build`
-
-and inspect the artifact.
-
----
-
-## 47. Final Session Flow for Teaching
-
-I would teach this session in exactly this order:
-
-```text
-1. Ask:
-   "Who has manually tested code before pushing it?"
-        ↓
-2. Explain CI
-        ↓
-3. Explain CD
-        ↓
-4. Draw CI/CD pipeline
-        ↓
-5. Introduce GitHub Actions
-        ↓
-6. Create GitHub repository
-        ↓
-7. Create Python application
-        ↓
-8. Run application locally
-        ↓
-9. Write tests
-        ↓
-10. Run pytest locally
-        ↓
-11. Create .github/workflows/ci.yml
-        ↓
-12. Explain:
-    Workflow
-    Job
-    Step
-    Runner
-        ↓
-13. git push
-        ↓
-14. Open Actions tab
-        ↓
-15. Read logs
-        ↓
-16. Show successful pipeline
-        ↓
-17. Explain artifact
-        ↓
-18. Download artifact
-        ↓
-19. Explain secrets
-        ↓
-20. Intentionally break code
-        ↓
-21. Push broken code
-        ↓
-22. Show RED pipeline
-        ↓
-23. Fix code
-        ↓
-24. Push again
-        ↓
-25. Show GREEN pipeline
-```
-
-### The one diagram students should remember
-
-```text
-                 DEVELOPER
-                     │
-                     │ git push
-                     ▼
-              ┌──────────────┐
-              │    GITHUB    │
-              └──────┬───────┘
-                     │
-                     ▼
-            ┌─────────────────┐
-            │ GITHUB ACTIONS  │
-            └────────┬────────┘
-                     │
-                     ▼
-              ┌─────────────┐
-              │   WORKFLOW  │
-              └──────┬──────┘
-                     │
-             ┌───────┴────────┐
-             ▼                ▼
-        TEST JOB          BUILD JOB
-             │                │
-         Run tests         Build app
-             │                │
-        PASS / FAIL       Create artifact
-             │                │
-             └───────┬────────┘
-                     ▼
-                  ARTIFACT
-```
-
-That gives Session 16 a clean progression from "What is CI/CD?" -> "What is GitHub Actions?" -> "How does YAML work?" -> "Let's actually push code" -> "Let's break the pipeline" -> "Let's fix it." That last failure/fix cycle is particularly useful because students see that CI is not just a pretty green tick in the Actions tab.
